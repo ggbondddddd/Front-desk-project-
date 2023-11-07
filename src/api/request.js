@@ -31,7 +31,7 @@ requests.interceptors.request.use((config) => {
     // 需要携带token带给服务器 如果token存在的话
     if (store.state.registerandlogin.token) {
         config.headers.token = store.state.registerandlogin.token
-        console.log(store.state.registerandlogin.token)
+        // console.log(store.state.registerandlogin.token)
     }
     nprogress.start()
     return config

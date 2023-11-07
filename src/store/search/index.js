@@ -10,9 +10,7 @@ const actions = {
         // 当前这个reqGetSearchInfo函数在调用获取服务器数据的时候，至少传递一个参数(空对象)
         // params形参：是当用户派发action的时候，第二个参数传递过来的，至少是一个空对象 params={}就是params没传值就默认是{}
         // 这一步是接收服务器返回的结果 把需要的信息拿到 然后commit给mutation
-
         let result = await reqGetSearchInfo(params)
-
         if (result.code === 200) {
             commit('GETSEARCHLIST', result.data)
         }

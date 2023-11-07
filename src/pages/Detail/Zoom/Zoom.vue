@@ -60,7 +60,7 @@ export default {
 
       // 这里的x是当前e在自己放大镜里面的坐标 不带px
       let x = e.offsetX;
-      console.log(x);
+      // console.log(x);
       let y = e.offsetY;
       // 此处是判断遮罩层移动多少px
       if (x <= 100) {

@@ -12,32 +12,42 @@ let orginPush = VueRouter.prototype.push //orginPush这个变量是全局挂载�
 let orainReplace = VueRouter.prototype.replace
 
 // 重写push|replace
+// 由于 vue-router3.0 及以上版本回调形式改成Promise API的形式了，返回的是一个Promise 。也是说 push和replace都是Promise类型了。
+// 而Promise的回调函数resolve和reject，必须传其中一个，否则会报错。如果路由地址跳转相同，且没有捕获到错误，控制台始终会出现上图所出现的问题。​
 // 第一个参数：告诉原来push方法，你往哪里跳转(传递哪些参数)
 // 第二个参数：成功回调
 // 第三个参数：失败的回调
 // call||apply区别：
 // 相同点：都可以调用函数一次，都可以篡改函数的上下文一次
 // 不同点：call传递参数用逗号隔开，apply方法执行传递数组
-VueRouter.prototype.push = function (location, reslove, reject) {
-    if (reslove && reject) {
+// VueRouter.prototype.push = function (location, reslove, reject) {
+//     if (reslove && reject) {
 
-        // 这里为什么要用call方法 因为这里的orginPush在外部所以挂载在window上 而VueRouter.prototype.push的this指向应该是VueRouter才对
-        //  所以这里就用call方法把orginPush的this指向从新指回VueRouter 这个函数里面的this指向就是VueRouter
-        orginPush.call(this, location, reslove, reject)
-    } else {
-        orginPush.call(this, location, () => { }, () => { })
+//         // 这里为什么要用call方法 因为这里的orginPush在外部所以挂载在window上 而VueRouter.prototype.push的this指向应该是VueRouter才对
+//         //  所以这里就用call方法把orginPush的this指向从新指回VueRouter 这个函数里面的this指向就是VueRouter
+//         orginPush.call(this, location, reslove, reject)
+//     } else {
+//         orginPush.call(this, location, () => { }, () => { })
 
 
-    }
+//     }
+// }
+
+VueRouter.prototype.push = function push(location) {
+    orginPush.call(this, location, () => { }, () => { })
 }
 
-VueRouter.prototype.replace = function (location, reslove, reject) {
-    if (reslove && reject) {
-        orainReplace.call(this, location, reslove, reject)
-    } else {
-        orainReplace.call(this, location, () => { }, () => { })
-    }
+VueRouter.prototype.replace = function replace(location) {
+    orainReplace.call(this, location, () => { }, () => { })
 }
+
+// VueRouter.prototype.replace = function (location, reslove, reject) {
+//     if (reslove && reject) {
+//         orainReplace.call(this, location, reslove, reject)
+//     } else {
+//         orainReplace.call(this, location, () => { }, () => { })
+//     }
+// }
 // 配置路由
 let router = new VueRouter({
     // 配置路由 要注意的时routes里面对象里面的属性不能胡乱写，只能写里面配置了的
